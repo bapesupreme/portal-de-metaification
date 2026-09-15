@@ -31,14 +31,7 @@ operations. Disabled alongside setting `package_verifier_enable 0` because it
 can block or flag the sideloaded `.debug`-style APKs and the Kiosk Satellite
 install used later in the process.
 
-## Account owner (Step 3)
-
-### `com.facebook.alohaservices.alohausers`
-Not disabled — this is the package whose UID owns the `com.facebook.aloha.*`
-account entries in `AccountManagerService`. The CVE-2024-31317 script spawns a
-shell running *as this UID* specifically so it has permission to call
-`removeAccount()` on those accounts; the package itself stays installed and
-running, since it's infrastructure, not something you disable.
+## Accounts removed (Step 3)
 
 ### `com.facebook.aloha.*` accounts (the four Facebook/WhatsApp login accounts)
 Not a package — these are `AccountManager` entries created during Facebook/
@@ -60,12 +53,15 @@ gone and you don't want the prompt resurfacing.
 ## Explicitly *not* touched
 
 ### `com.facebook.alohaservices.alohausers`
-Not a caution call like the two below — this one is a hard dependency. It's
-the package whose UID the CVE-2024-31317 script borrows to gain permission to
-call `removeAccount()`, and almost certainly the registered account
-authenticator for the `com.facebook.aloha.*` account type. Removing it breaks
-the account-removal technique itself (`UID_LINE` lookup fails) and risks
-orphaning the account-type registration rather than cleaning it up. See
+This is the package whose UID owns the `com.facebook.aloha.*` account entries
+in `AccountManagerService` — the CVE-2024-31317 script spawns a shell running
+*as this UID* specifically to gain permission to call `removeAccount()`. It's
+a hard dependency, not a caution call like the two below: it's almost
+certainly the registered account authenticator for the `com.facebook.aloha.*`
+account type, so removing it breaks the account-removal technique itself
+(`UID_LINE` lookup fails immediately) and risks orphaning the account-type
+registration rather than cleaning it up. Stays installed and running
+throughout the whole process. See
 [`docs/alohausers-not-removed.md`](docs/alohausers-not-removed.md) for the
 full reasoning.
 
