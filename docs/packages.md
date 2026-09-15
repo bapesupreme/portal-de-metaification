@@ -59,6 +59,16 @@ gone and you don't want the prompt resurfacing.
 
 ## Explicitly *not* touched
 
+### `com.facebook.alohaservices.alohausers`
+Not a caution call like the two below — this one is a hard dependency. It's
+the package whose UID the CVE-2024-31317 script borrows to gain permission to
+call `removeAccount()`, and almost certainly the registered account
+authenticator for the `com.facebook.aloha.*` account type. Removing it breaks
+the account-removal technique itself (`UID_LINE` lookup fails) and risks
+orphaning the account-type registration rather than cleaning it up. See
+[`docs/alohausers-not-removed.md`](docs/alohausers-not-removed.md) for the
+full reasoning.
+
 ### `com.facebook.alohaservices.system.services`
 Checked and ruled out as the OTA engine. Left alone — this is shared system
 infrastructure other components depend on; disabling it risks breaking
