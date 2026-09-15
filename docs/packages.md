@@ -27,9 +27,16 @@ update activity.
 ### `com.facebook.appverifier`
 Android's package verifier component (Meta's build of it) — checks installed
 APKs against a trust/signature policy before allowing installation or certain
-operations. Disabled alongside setting `package_verifier_enable 0` because it
-can block or flag the sideloaded `.debug`-style APKs and the Kiosk Satellite
-install used later in the process.
+operations, and can block, warn on, or flag installs that fail its checks,
+including unsigned or unexpectedly-signed sideloaded APKs.
+
+Disabled alongside setting `package_verifier_enable 0` (a separate
+`Settings.Global` key that turns off verification system-wide, independent of
+this package's own enabled state — both need to be off, which is why the
+README does both together). Sideloaded APKs (the `.debug`-signed fork builds,
+Kiosk Satellite) don't carry the same signing trust as stock Meta-signed apps,
+so the verifier is a likely point of friction for those installs; disabling
+both removes that check as a variable.
 
 ## Accounts removed (Step 3)
 
