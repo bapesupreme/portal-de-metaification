@@ -28,6 +28,14 @@ Disable the wipe/OTA/verifier packages **before** touching accounts. Doing it in
 the wrong order (accounts first) risks the device wiping itself mid-process —
 see [`docs/fdr-chain.md`](docs/fdr-chain.md) for why.
 
+## Android 9 vs Android 10
+
+This repo's steps were written against Gen 1 (Android 9, API 28). If you're on
+Android 10 hardware, see [`docs/adb-paths-android9-vs-10.md`](docs/adb-paths-android9-vs-10.md)
+for the two viable paths to a zero-account ADB state and when to use each —
+the CVE-2024-31317 script still applies, but Test Harness Mode is also an
+option there.
+
 ## 1. Prerequisites
 
 - Go through stock setup once (Wi-Fi + Facebook/WhatsApp login) — you need a
@@ -63,6 +71,9 @@ Expect `No receivers found`.
 > exact package was never identified; `system.services` and `alohaappmanager`
 > were checked and ruled out as *not* it, but are load-bearing shared
 > infrastructure — don't try to disable them.
+
+See [`docs/packages.md`](docs/packages.md) for what each of these packages
+does and why it's safe to disable.
 
 ## 3. Remove Facebook/Meta accounts
 
@@ -164,3 +175,5 @@ adb shell pm disable-user --user 0 com.facebook.alohaapps.personaluser
 - Android 10 has a second option for reaching a zero-account ADB state: Test
   Harness Mode. See [`docs/adb-paths-android9-vs-10.md`](docs/adb-paths-android9-vs-10.md)
   for when to use it instead of the CVE-2024-31317 script.
+- `com.facebook.alohaservices.alohausers` is never disabled or removed — see
+  [`docs/alohausers-not-removed.md`](docs/alohausers-not-removed.md) for why.
