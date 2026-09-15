@@ -1,3 +1,11 @@
+## Android 9 vs Android 10
+
+This repo's steps were written against Gen 1 (Android 9, API 28). If you're on
+Android 10 hardware, see [`docs/adb-paths-android9-vs-10.md`](docs/adb-paths-android9-vs-10.md)
+for the two viable paths to a zero-account ADB state and when to use each —
+the CVE-2024-31317 script still applies, but Test Harness Mode is also an
+option there.
+
 # Portal De-Meta-ification (Android 9, Gen 1)
 
 Notes and scripts from de-Facebooking a Meta Portal Gen 1 (Android 9, API 28,
@@ -153,3 +161,6 @@ adb shell pm disable-user --user 0 com.facebook.alohaapps.personaluser
   observed not firing on at least one reboot in testing — cause unconfirmed.
 - The real OTA download/apply engine's package was never conclusively
   identified on this firmware build.
+- Android 10 has a second option for reaching a zero-account ADB state: Test
+  Harness Mode. See [`docs/adb-paths-android9-vs-10.md`](docs/adb-paths-android9-vs-10.md)
+  for when to use it instead of the CVE-2024-31317 script.
